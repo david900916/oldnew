@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>座位查詢</title>
-    
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>座位查詢 - 轉置顯示</title>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -12,12 +11,22 @@
     background: #f0f8ff;
     text-align: center;
   }
-  .tables-row {
+  #seating-area {
     display: flex;
     flex-direction: row;
-    gap: 12px;
+    gap: 24px;
     justify-content: center;
-    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+#seating-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+  .tables-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
   .table {
     width: 100px;
@@ -32,60 +41,65 @@
     font-size: 18px;
     user-select: none;
     white-space: nowrap;
+    cursor: pointer;
+  }
+  .guest-list {
+    margin-top: 6px;
+    font-size: 14px;
+    background: #fffbea;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 6px 10px;
+    text-align: left;
+  }
+  #original-seating {
+    display: none; /* 隱藏原始座位 */
   }
 </style>
+</head>
+<body>
 
-<div class="tables-row" data-row-id="r1"><div class="table" data-key="r1-0" style="background-color: rgb(255, 248, 220);" data-id="T01">圓桌1-1</div><div class="table" data-key="r1-1" style="background-color: rgb(255, 248, 220);" data-id="T02">圓桌1-2</div><div class="table" data-key="r1-2" style="background-color: rgb(255, 248, 220);" data-id="T03">圓桌1-3</div><div class="table" data-key="r1-3" style="background-color: rgb(255, 248, 220);" data-id="T04">圓桌1-4</div><div class="table" data-key="r1-4" style="background-color: rgb(255, 248, 220);" data-id="T05">圓桌1-5</div></div><div class="tables-row" data-row-id="r2"><div class="table" data-key="r2-0" style="background-color: rgb(255, 248, 220);" data-id="T06">圓桌2-1</div><div class="table" data-key="r2-1" style="background-color: rgb(255, 248, 220);" data-id="T07">圓桌2-2</div><div class="table" data-key="r2-2" style="background-color: rgb(255, 248, 220);" data-id="T08">圓桌2-3</div><div class="table" data-key="r2-3" style="background-color: rgb(255, 248, 220);" data-id="T09">圓桌2-4</div><div class="table" data-key="r2-4" style="background-color: rgb(255, 248, 220);" data-id="T10">圓桌2-5</div></div><div class="tables-row" data-row-id="r3"><div class="table" data-key="r3-0" style="background-color: rgb(255, 248, 220);" data-id="T11">圓桌3-1</div><div class="table" data-key="r3-1" style="background-color: rgb(255, 248, 220);" data-id="T12">圓桌3-2</div><div class="table" data-key="r3-2" style="background-color: rgb(255, 248, 220);" data-id="T13">圓桌3-3</div><div class="table" data-key="r3-3" style="background-color: rgb(255, 248, 220);" data-id="T14">圓桌3-4</div><div class="table" data-key="r3-4" style="background-color: rgb(255, 248, 220);" data-id="T15">圓桌3-5</div></div>
+<div id="seating-wrapper"><div id="seating-area" style="display: flex; flex-direction: column; gap: 12px; justify-content: center;"><div class="tables-row" style="display: flex; flex-direction: row; gap: 24px;"><div class="table" data-key="r1-0" style="background-color: rgb(255, 248, 220);" data-id="1-1">圓桌1-1</div><div class="table" data-key="r2-0" style="background-color: rgb(255, 248, 220);" data-id="1-2">圓桌2-1</div><div class="table" data-key="r3-0" style="background-color: rgb(255, 248, 220);" data-id="1-3">圓桌3-1564</div></div><div class="tables-row" style="display: flex; flex-direction: row; gap: 24px;"><div class="table" data-key="r1-1" style="background-color: rgb(255, 248, 220);" data-id="2-1">圓桌1-2</div><div class="table" data-key="r2-1" style="background-color: rgb(255, 248, 220);" data-id="2-2">圓645桌2-2</div><div class="table" data-key="r3-1" style="background-color: rgb(255, 248, 220);" data-id="2-3">圓桌6753-2</div></div><div class="tables-row" style="display: flex; flex-direction: row; gap: 24px;"><div class="table" data-key="r1-2" style="background-color: rgb(255, 248, 220);" data-id="3-1">圓桌1243-3</div><div class="table" data-key="r2-2" style="background-color: rgb(255, 248, 220);" data-id="3-2">圓桌2-3</div><div class="table" data-key="r3-2" style="background-color: rgb(255, 248, 220);" data-id="3-3">圓桌3-3</div></div><div class="tables-row" style="display: flex; flex-direction: row; gap: 24px;"><div class="table" data-key="r1-3" style="background-color: rgb(255, 248, 220);" data-id="4-1">圓桌1-4</div><div class="table" data-key="r2-3" style="background-color: rgb(255, 248, 220);" data-id="4-2">圓桌245-4</div><div class="table" data-key="r3-3" style="background-color: rgb(255, 248, 220);" data-id="4-3">圓桌3-4</div></div><div class="tables-row" style="display: flex; flex-direction: row; gap: 24px;"><div class="table" data-key="r1-4" style="background-color: rgb(255, 248, 220);" data-id="5-1">圓桌1-5</div><div class="table" data-key="r2-4" style="background-color: rgb(255, 248, 220);" data-id="5-2">圓桌2-5</div><div class="table" data-key="r3-4" style="background-color: rgb(255, 248, 220);" data-id="5-3">圓桌3-5</div></div></div></div>
+
 <script>
   const guestData = {
-    "T01": ["小明", "小美", "小華"],
-    "T02": ["阿宏", "阿玉", "阿豪"],
-    "T03": ["佳芳", "麗娟"],
-    "T04": ["國強", "大偉", "志明"],
-    "T05": ["秀蘭", "美玲"],
-    "T06": ["宇軒", "家豪"],
-    "T07": ["曉恩", "芸芸"],
-    "T08": ["曉華", "阿福"],
-    "T09": ["靜宜", "佩佩"],
-    "T10": ["育誠", "小芬"]
-    // 可再加更多...
+    "1-1": ["小明", "小美", "小華"],
+    "1-2": ["阿宏", "阿玉", "阿豪"],
+    "1-3": ["佳芳", "麗娟"],
+    "2-1": ["秀蘭", "美玲"],
+    "2-2": ["宇軒", "家豪"],
+    "2-3": ["阿亮", "小強"],
+    "3-1": ["曉恩", "芸芸"],
+    "3-2": ["曉華", "阿福"],
+    "3-3": ["靜宜", "佩佩"],
+    "4-1": ["阿德", "小志"],
+    "4-2": ["佩君", "欣怡"],
+    "4-3": ["阿明", "文傑"],
+    "5-1": ["志強", "婷婷"],
+    "5-2": ["雅雯", "柏豪"],
+    "5-3": ["凱婷", "阿健"]
   };
 
-  const tables = document.querySelectorAll('.table');
-
-  tables.forEach((tableEl, index) => {
-    const id = `T${String(index + 1).padStart(2, '0')}`;
-    tableEl.setAttribute('id', id);
-    tableEl.style.cursor = 'pointer';
-
-    tableEl.addEventListener('click', () => {
-      const existingList = tableEl.nextElementSibling;
-      if (existingList?.classList.contains('guest-list')) {
-        existingList.remove(); // 再點一次就收合
-        return;
-      }
-
-      // 如果有其他開著的名單，先關掉
+  document.querySelectorAll('.table').forEach(table => {
+    table.addEventListener('click', () => {
+      // 移除舊的名單
       document.querySelectorAll('.guest-list').forEach(e => e.remove());
 
-      const guests = guestData[id] || ["(無資料)"];
+      const pos = table.getAttribute('data-id');
+      const guests = guestData[pos] || ["（無資料）"];
 
       const listDiv = document.createElement('div');
       listDiv.className = 'guest-list';
-      listDiv.style.marginTop = '6px';
-      listDiv.style.fontSize = '14px';
-      listDiv.style.background = '#fffbea';
-      listDiv.style.border = '1px solid #ccc';
-      listDiv.style.borderRadius = '8px';
-      listDiv.style.padding = '6px 10px';
-      listDiv.innerHTML = `<strong>名單：</strong><ul style="margin:4px 0;padding-left:20px;">` +
+      listDiv.innerHTML = `<strong>${table.textContent} 名單：</strong><ul>` +
         guests.map(name => `<li>${name}</li>`).join('') +
         `</ul>`;
 
-      tableEl.insertAdjacentElement('afterend', listDiv);
+      table.insertAdjacentElement('afterend', listDiv);
     });
   });
 </script>
 
+
 </body>
 </html>
+
