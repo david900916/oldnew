@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>座位查詢</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 1rem;
+      background: #f8f9fa;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .table-btn {
+      background-color: #3498db;
+      color: white;
+      padding: 1rem;
+      border-radius: 50%;
+      text-align: center;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1.2rem;
+      border: none;
+      transition: 0.2s;
+    }
+
+    .table-btn:hover {
+      background-color: #2980b9;
+    }
+
+    .guest-list {
+      margin-top: 2rem;
+      background: white;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>桌位查詢</h1>
+
+  <div class="grid" id="tableGrid"></div>
+
+  <div class="guest-list" id="guestList">
+    <h2 id="tableTitle"></h2>
+    <ul id="nameList"></ul>
+  </div>
+
+  <script>
+    // 假資料：桌號對應賓客名單
+    const guestData = {
+      "1桌": ["小明", "小美", "小華"],
+      "2桌": ["阿宏", "阿玉", "阿豪"],
+      "3桌": ["佳芳", "麗娟"],
+      "4桌": ["國強", "大偉", "志明"],
+      "5桌": ["秀蘭", "美玲"],
+      "6桌": ["宇軒", "家豪"],
+      "7桌": ["曉恩", "芸芸"],
+      "8桌": ["曉華", "阿福"],
+      "9桌": ["靜宜", "佩佩"],
+      "10桌": ["育誠", "小芬"],
+      "11桌": ["豪哥", "志強"],
+      "12桌": ["阿德", "阿興"],
+      "13桌": ["阿凱", "阿順"],
+      "14桌": ["佩君", "小潔"],
+      "15桌": ["婉蓉", "雨欣"],
+      "16桌": ["聰哥", "大華"],
+      "17桌": ["曉竹", "雪莉"],
+      "18桌": ["明美", "小妍"],
+      "19桌": ["玉珍", "小芳"],
+      "20桌": ["德明", "阿明"]
+    };
+
+    const tableGrid = document.getElementById('tableGrid');
+    const guestList = document.getElementById('guestList');
+    const tableTitle = document.getElementById('tableTitle');
+    const nameList = document.getElementById('nameList');
+
+    // 產生桌子按鈕
+    Object.keys(guestData).forEach(table => {
+      const btn = document.createElement('button');
+      btn.className = 'table-btn';
+      btn.textContent = table;
+      btn.onclick = () => {
+        tableTitle.textContent = `${table} 名單：`;
+        nameList.innerHTML = '';
+        guestData[table].forEach(name => {
+          const li = document.createElement('li');
+          li.textContent = name;
+          nameList.appendChild(li);
+        });
+        guestList.style.display = 'block';
+        guestList.scrollIntoView({ behavior: 'smooth' });
+      };
+      tableGrid.appendChild(btn);
+    });
+  </script>
+</body>
+</html>
