@@ -62,21 +62,14 @@
 <div id="seating-wrapper"><div id="seating-area" style="display: flex; flex-direction: column; gap: 12px; justify-content: center;"><div class="tables-row" style="display: flex; flex-direction: row; gap: 24px;"><div class="table" data-key="r1-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;" data-id="1-1">圓桌1-1</div><div class="table" data-key="r2-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;" data-id="1-2">圓桌2-1</div><div class="table" data-key="r3-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;" data-id="1-3">圓桌3-1</div><div class="table" data-key="r4-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;" data-id="1-4">圓桌4-1</div></div><div class="tables-row" style="display: flex; flex-direction: row; gap: 24px;"><div class="table invisible-table" style="visibility: hidden; width: 100px; height: 100px; font-size: 18px;"></div><div class="table" data-key="r2-1" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;" data-id="2-2">圓桌2-2</div><div class="table" data-key="r3-1" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;" data-id="2-3">圓桌3-2</div><div class="table invisible-table" style="visibility: hidden; width: 100px; height: 100px; font-size: 18px;"></div></div></div></div> 
   <script>
   const guestData = {
-    "1-1": ["小明", "小美", "小華"],
-    "1-2": ["阿宏", "阿玉", "阿豪"],
-    "1-3": ["佳芳", "麗娟"],
-    "2-1": ["秀蘭", "美玲"],
-    "2-2": ["宇軒", "家豪"],
-    "2-3": ["阿亮", "小強"],
-    "3-1": ["曉恩", "芸芸"],
-    "3-2": ["曉華", "阿福"],
-    "3-3": ["靜宜", "佩佩"],
-    "4-1": ["阿德", "小志"],
-    "4-2": ["佩君", "欣怡"],
-    "4-3": ["阿明", "文傑"],
-    "5-1": ["志強", "婷婷"],
-    "5-2": ["雅雯", "柏豪"],
-    "5-3": ["凱婷", "阿健"]
+  "r1-0": ["小明", "小美", "小華"],
+  "r1-1": ["佳芳", "麗娟"],
+  "r2-0": ["阿宏", "阿玉", "阿豪"],
+  "r2-1": ["宇軒", "家豪"],
+  "r3-0": ["曉恩", "芸芸"],
+  "r3-1": ["曉華", "阿福"],
+  "r4-0": ["阿德", "小志"]
+
   };
 
   document.querySelectorAll('.table').forEach(table => {
