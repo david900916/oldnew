@@ -73,22 +73,22 @@
   };
 
   document.querySelectorAll('.table').forEach(table => {
-    table.addEventListener('click', () => {
-      // 移除舊的名單
-      document.querySelectorAll('.guest-list').forEach(e => e.remove());
+  table.addEventListener('click', () => {
+    document.querySelectorAll('.guest-list').forEach(e => e.remove());
 
-      const pos = table.getAttribute('data-id');
-      const guests = guestData[pos] || ["（無資料）"];
+    const key = table.getAttribute('data-key'); // ✅ 改用 data-key
+    const guests = guestData[key] || ["（無資料）"];
 
-      const listDiv = document.createElement('div');
-      listDiv.className = 'guest-list';
-      listDiv.innerHTML = `<strong>${table.textContent} 名單：</strong><ul>` +
-        guests.map(name => `<li>${name}</li>`).join('') +
-        `</ul>`;
+    const listDiv = document.createElement('div');
+    listDiv.className = 'guest-list';
+    listDiv.innerHTML = `<strong>${table.textContent} 名單：</strong><ul>` +
+      guests.map(name => `<li>${name}</li>`).join('') +
+      `</ul>`;
 
-      table.insertAdjacentElement('afterend', listDiv);
-    });
+    table.insertAdjacentElement('afterend', listDiv);
   });
+});
+
 </script>
 
 
