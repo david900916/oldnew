@@ -139,60 +139,65 @@
 
    function searchGuest() {
   const keyword = document.getElementById("searchInput").value.trim();
+  const hintBox = document.getElementById("searchHint");
   if (!keyword) {
     alert("請輸入姓名或桌名關鍵字");
     return;
   }
 
-  clearHighlightsAndLists(); // 清除舊的高亮
+  clearHighlightsAndLists();
+  hintBox.textContent = "";
 
   const foundTables = new Set();
 
-  // 人名比對
+  // 1. 人名比對
   for (const [key, guests] of Object.entries(guestData)) {
     if (guests.some(name => name.includes(keyword))) {
       foundTables.add(key);
     }
   }
 
-    // 桌名模糊比對
+  // 2. 完全桌名匹配
+  const exactMatchTable = Array.from(document.querySelectorAll('.table')).find(
+    table => table.textContent.trim() === keyword
+  );
+  if (exactMatchTable) {
+    const key = exactMatchTable.getAttribute('data-key');
+    highlightAndShowList(exactMatchTable, true);
+    return;
+  }
+
+  // 3. 模糊桌名比對
+  const threshold = 0.5;
+
   document.querySelectorAll('.table').forEach(table => {
     const key = table.getAttribute('data-key');
     const tableName = table.textContent.trim();
-    const score = levenshtein(tableName, keyword);
-    const threshold = 0.5; // 建議值
-if (tableName.includes(keyword) || score >= threshold)
+    const score = similarity(tableName, keyword);
 
-
- {
+    if (tableName.includes(keyword) || score >= threshold) {
       foundTables.add(key);
     }
   });
-
-
 
   if (foundTables.size === 0) {
     alert("查無此人或桌名");
     return;
   }
-if (foundTables.size > 1) {
-  document.getElementById("searchHint").textContent = "🔍 找到多個相似桌名，已同時高亮，請確認是否正確。";
-} else {
-  document.getElementById("searchHint").textContent = ""; // 清除舊訊息
-}
 
+  if (foundTables.size > 1) {
+    hintBox.textContent = "🔍 找到多個相似桌名，已同時高亮，請確認是否正確。";
+  }
 
-
-  // 高亮並展開名單（支援人名高亮）
   foundTables.forEach(key => {
     const table = document.querySelector(`.table[data-key="${key}"]`);
     if (table) {
-      // 如果是人名觸發，才傳入 highlightName（否則傳空字串）
       const highlightName = guestData[key]?.includes(keyword) ? keyword : "";
       highlightAndShowList(table, true, highlightName);
     }
   });
 }
+
 
 
 
