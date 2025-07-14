@@ -108,69 +108,79 @@
       document.querySelectorAll('.guest-list').forEach(e => e.remove());
     }
 
-    function highlightAndShowList(table, skipClear = false) {
-      if (!skipClear) clearHighlightsAndLists();
+    function highlightAndShowList(table, skipClear = false, highlightName = '') {
+  if (!skipClear) clearHighlightsAndLists();
 
-      const key = table.getAttribute('data-key');
-      const guests = guestData[key] || ["（無資料）"];
+  const key = table.getAttribute('data-key');
+  const guests = guestData[key] || ["（無資料）"];
 
-      table.style.backgroundColor = '#ffeb3b';
-      table.style.border = '3px solid red';
+  table.style.backgroundColor = '#ffeb3b';
+  table.style.border = '3px solid red';
 
-      const listDiv = document.createElement('div');
-      listDiv.className = 'guest-list';
-      listDiv.innerHTML = `
-        <strong>${table.textContent} 名單：</strong>
-        <ul>${guests.map(name => `<li>${name}</li>`).join('')}</ul>
-        <button onclick="sendToLine('${table.textContent}')">送出至 LINE</button>
-      `;
-      table.insertAdjacentElement('afterend', listDiv);
-    }
+  const listDiv = document.createElement('div');
+  listDiv.className = 'guest-list';
+  listDiv.innerHTML = `
+    <strong>${table.textContent} 名單：</strong>
+    <ul>
+      ${guests.map(name => {
+        const displayName = (name === highlightName)
+          ? `<span style="color:red; font-weight:bold;">${name}</span>`
+          : name;
+        return `<li>${displayName}</li>`;
+      }).join('')}
+    </ul>
+    <button onclick="sendToLine('${table.textContent}')">送出至 LINE</button>
+  `;
+  table.insertAdjacentElement('afterend', listDiv);
+}
 
-    document.querySelectorAll('.table').forEach(table => {
-      if (!table.classList.contains('invisible-table')) {
-        table.addEventListener('click', () => {
-          highlightAndShowList(table);  // 點擊清除其他高亮，只保留一桌
-        });
-      }
-    });
 
     function searchGuest() {
-      const name = document.getElementById("searchInput").value.trim();
-      if (!name) {
-        alert("請輸入姓名");
-        return;
-      }
+  const name = document.getElementById("searchInput").value.trim();
+  if (!name) {
+    alert("請輸入姓名");
+    return;
+  }
 
-      clearHighlightsAndLists(); // 搜尋前清除
+  clearHighlightsAndLists(); // 搜尋前清除
 
-      const foundTables = [];
+  const foundTables = [];
 
-      for (const [key, guests] of Object.entries(guestData)) {
-        if (guests.includes(name)) {
-          foundTables.push(key);
-        }
-      }
-
-      if (foundTables.length === 0) {
-        alert("查無此人");
-        return;
-      }
-
-      // 多桌同時高亮與展開，不清除中途高亮
-      foundTables.forEach(key => {
-        const table = document.querySelector(`.table[data-key="${key}"]`);
-        if (table) {
-          highlightAndShowList(table, true);
-        }
-      });
+  for (const [key, guests] of Object.entries(guestData)) {
+    if (guests.includes(name)) {
+      foundTables.push(key);
     }
+  }
+
+  if (foundTables.length === 0) {
+    alert("查無此人");
+    return;
+  }
+
+  // 多桌同時高亮與展開，並高亮名字
+  foundTables.forEach(key => {
+    const table = document.querySelector(`.table[data-key="${key}"]`);
+    if (table) {
+      highlightAndShowList(table, true, name);  // ✅ 傳入 name
+    }
+  });
+}
+
 
     function sendToLine(tableName) {
       const encoded = encodeURIComponent(tableName);
       const lineUrl = `https://line.me/R/oaMessage/@105puztp/?${encoded}`;
       window.open(lineUrl, '_blank');
     }
+
+document.querySelectorAll('.table').forEach(table => {
+  if (!table.classList.contains('invisible-table')) {
+    table.addEventListener('click', () => {
+      highlightAndShowList(table);
+    });
+  }
+});
+
   </script>
 </body>
 </html>
