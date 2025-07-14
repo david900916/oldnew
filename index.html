@@ -72,14 +72,14 @@
   <div id="seating-wrapper">
     <div id="seating-area">
       <div class="tables-row">
-        <div class="table" data-key="r1-0">圓桌1-1</div>
-        <div class="table" data-key="r2-0">圓桌2-1</div>
+        <div class="table" data-key="r1-0">女方朋友1-1</div>
+        <div class="table" data-key="r2-0">女方親友2-1</div>
         <div class="table" data-key="r3-0">圓桌3-1</div>
       </div>
       <div class="tables-row">
         <div class="table invisible-table" style="visibility: hidden;"></div>
         <div class="table" data-key="r2-1">圓桌2-2</div>
-        <div class="table" data-key="r3-1">圓桌3-2</div>
+        <div class="table" data-key="r3-1">男方同事</div>
       </div>
       <div class="tables-row">
         <div class="table invisible-table" style="visibility: hidden;"></div>
@@ -135,36 +135,52 @@
 }
 
 
-    function searchGuest() {
-  const name = document.getElementById("searchInput").value.trim();
-  if (!name) {
-    alert("請輸入姓名");
+   function searchGuest() {
+  const keyword = document.getElementById("searchInput").value.trim();
+  if (!keyword) {
+    alert("請輸入姓名或桌名關鍵字");
     return;
   }
 
-  clearHighlightsAndLists(); // 搜尋前清除
+  clearHighlightsAndLists(); // 清除舊的高亮
 
-  const foundTables = [];
+  const foundTables = new Set();
 
+  // 人名比對
   for (const [key, guests] of Object.entries(guestData)) {
-    if (guests.includes(name)) {
-      foundTables.push(key);
+    if (guests.some(name => name.includes(keyword))) {
+      foundTables.add(key);
     }
   }
 
-  if (foundTables.length === 0) {
-    alert("查無此人");
+    // 桌名模糊比對
+  document.querySelectorAll('.table').forEach(table => {
+    const key = table.getAttribute('data-key');
+    const tableName = table.textContent.trim();
+    const score = levenshtein(tableName, keyword);
+    if (tableName.includes(keyword) || score > 0.6) {
+      foundTables.add(key);
+    }
+  });
+
+
+
+  if (foundTables.size === 0) {
+    alert("查無此人或桌名");
     return;
   }
 
-  // 多桌同時高亮與展開，並高亮名字
+  // 高亮並展開名單（支援人名高亮）
   foundTables.forEach(key => {
     const table = document.querySelector(`.table[data-key="${key}"]`);
     if (table) {
-      highlightAndShowList(table, true, name);  // ✅ 傳入 name
+      // 如果是人名觸發，才傳入 highlightName（否則傳空字串）
+      const highlightName = guestData[key]?.includes(keyword) ? keyword : "";
+      highlightAndShowList(table, true, highlightName);
     }
   });
 }
+
 
 
     function sendToLine(tableName) {
@@ -173,13 +189,41 @@
       window.open(lineUrl, '_blank');
     }
 
-document.querySelectorAll('.table').forEach(table => {
-  if (!table.classList.contains('invisible-table')) {
-    table.addEventListener('click', () => {
-      highlightAndShowList(table);
-    });
+
+
+
+function similarity(s1, s2) {
+  let longer = s1.length > s2.length ? s1 : s2;
+  let shorter = s1.length > s2.length ? s2 : s1;
+  let sameCount = 0;
+  for (let char of shorter) {
+    if (longer.includes(char)) sameCount++;
   }
-});
+  return sameCount / longer.length;
+}
+
+function levenshtein(a, b) {
+  const matrix = Array.from({ length: a.length + 1 }, () => []);
+  for (let i = 0; i <= a.length; i++) matrix[i][0] = i;
+  for (let j = 0; j <= b.length; j++) matrix[0][j] = j;
+
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      matrix[i][j] = a[i - 1] === b[j - 1]
+        ? matrix[i - 1][j - 1]
+        : Math.min(
+            matrix[i - 1][j] + 1,
+            matrix[i][j - 1] + 1,
+            matrix[i - 1][j - 1] + 1
+          );
+    }
+  }
+
+  const distance = matrix[a.length][b.length];
+  const maxLen = Math.max(a.length, b.length);
+  return (maxLen - distance) / maxLen; // 相似度分數 (0~1)
+}
+
 
   </script>
 </body>
