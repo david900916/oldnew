@@ -1,96 +1,176 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>座位查詢 - 轉置顯示</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-    background: #f0f8ff;
-    text-align: center;
-  }
-  #seating-area {
-    display: flex;
-    flex-direction: row;
-    gap: 24px;
-    justify-content: center;
-    align-items: flex-start;
-  }
-#seating-wrapper {
-  display: flex;
-  justify-content: center;
-}
-
-  .tables-col {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .table {
-    width: 100px;
-    height: 100px;
-    background-color: rgb(255, 248, 220);
-    border: 2px solid #ccc;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    font-size: 18px;
-    user-select: none;
-    white-space: nowrap;
-    cursor: pointer;
-  }
-  .guest-list {
-    margin-top: 6px;
-    font-size: 14px;
-    background: #fffbea;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 6px 10px;
-    text-align: left;
-  }
-  #original-seating {
-    display: none; /* 隱藏原始座位 */
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>座位查詢 - 轉置顯示</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f0f8ff;
+      text-align: center;
+    }
+    #seating-area {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+    }
+    .tables-row {
+      display: flex;
+      flex-direction: row;
+      gap: 24px;
+    }
+    .table {
+      width: 100px;
+      height: 100px;
+      background-color: rgb(255, 248, 220);
+      border: 2px solid #ccc;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 18px;
+      user-select: none;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .guest-list {
+      margin-top: 6px;
+      font-size: 14px;
+      background: #fffbea;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 6px 10px;
+      text-align: left;
+    }
+    .guest-list button {
+      margin-top: 8px;
+      font-size: 14px;
+      padding: 4px 8px;
+      cursor: pointer;
+    }
+    #searchBar {
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
 <body>
+  <div id="notice" style="margin-bottom: 12px; color: #444; background: #fffde7; padding: 10px 14px; border: 1px solid #f0c000; border-radius: 6px;">
+    📣 <strong>提醒：</strong>為了辨識您的身分，請點選「送出至 LINE」將座位訊息同步至官方帳號。<br>
+    因為每位貴賓的 LINE 帳號是唯一的，請務必告知我們，才能讓現場人員知道您是誰。
+  </div>
 
-<div id="seating-wrapper"><div id="seating-area" style="display: flex; flex-direction: column; gap: 12px; justify-content: center;"><div class="tables-row" style="display: flex; flex-direction: row; gap: 24px;"><div class="table" data-key="r1-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">圓桌1-1</div><div class="table" data-key="r2-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">圓桌2-1</div><div class="table" data-key="r3-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">圓桌3-1</div></div><div class="tables-row" style="display: flex; flex-direction: row; gap: 24px;"><div class="table invisible-table" style="visibility: hidden; width: 100px; height: 100px; font-size: 18px;"></div><div class="table" data-key="r2-1" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">圓桌2-2</div><div class="table" data-key="r3-1" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">圓桌3-2</div></div><div class="tables-row" style="display: flex; flex-direction: row; gap: 24px;"><div class="table invisible-table" style="visibility: hidden; width: 100px; height: 100px; font-size: 18px;"></div><div class="table invisible-table" style="visibility: hidden; width: 100px; height: 100px; font-size: 18px;"></div><div class="table" data-key="r3-2" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">圓桌3-3</div></div></div></div>
-  
+  <div id="searchBar">
+    <input type="text" id="searchInput" placeholder="請輸入姓名">
+    <button onclick="searchGuest()">搜尋</button>
+  </div>
+
+  <div id="seating-wrapper">
+    <div id="seating-area">
+      <div class="tables-row">
+        <div class="table" data-key="r1-0">圓桌1-1</div>
+        <div class="table" data-key="r2-0">圓桌2-1</div>
+        <div class="table" data-key="r3-0">圓桌3-1</div>
+      </div>
+      <div class="tables-row">
+        <div class="table invisible-table" style="visibility: hidden;"></div>
+        <div class="table" data-key="r2-1">圓桌2-2</div>
+        <div class="table" data-key="r3-1">圓桌3-2</div>
+      </div>
+      <div class="tables-row">
+        <div class="table invisible-table" style="visibility: hidden;"></div>
+        <div class="table invisible-table" style="visibility: hidden;"></div>
+        <div class="table" data-key="r3-2">圓桌3-3</div>
+      </div>
+    </div>
+  </div>
+
   <script>
-  const guestData = {
-  "r1-0": ["小明", "小美", "小華"],
-  "r1-1": ["佳芳", "麗娟"],
-  "r2-0": ["阿宏", "阿玉", "阿豪"],
-  "r2-1": ["宇軒", "家豪"],
-  "r3-0": ["曉恩", "芸芸"],
-  "r3-1": ["曉華", "阿福"],
-  "r4-0": ["阿德", "小志"]
+    const guestData = {
+      "r1-0": ["小明", "小美", "小華"],
+      "r1-1": ["佳芳", "麗娟"],
+      "r2-0": ["阿宏", "阿玉", "阿豪"],
+      "r2-1": ["宇軒", "家豪"],
+      "r3-0": ["小明", "芸芸"],
+      "r3-1": ["曉華", "阿福"],
+      "r3-2": ["阿德", "小志"]
+    };
 
-  };
+    function clearHighlightsAndLists() {
+      document.querySelectorAll('.table').forEach(t => {
+        t.style.backgroundColor = '';
+        t.style.border = '2px solid #ccc';
+      });
+      document.querySelectorAll('.guest-list').forEach(e => e.remove());
+    }
 
-  document.querySelectorAll('.table').forEach(table => {
-  table.addEventListener('click', () => {
-    document.querySelectorAll('.guest-list').forEach(e => e.remove());
+    function highlightAndShowList(table, skipClear = false) {
+      if (!skipClear) clearHighlightsAndLists();
 
-    const key = table.getAttribute('data-key'); // ✅ 改用 data-key
-    const guests = guestData[key] || ["（無資料）"];
+      const key = table.getAttribute('data-key');
+      const guests = guestData[key] || ["（無資料）"];
 
-    const listDiv = document.createElement('div');
-    listDiv.className = 'guest-list';
-    listDiv.innerHTML = `<strong>${table.textContent} 名單：</strong><ul>` +
-      guests.map(name => `<li>${name}</li>`).join('') +
-      `</ul>`;
+      table.style.backgroundColor = '#ffeb3b';
+      table.style.border = '3px solid red';
 
-    table.insertAdjacentElement('afterend', listDiv);
-  });
-});
-</script>
+      const listDiv = document.createElement('div');
+      listDiv.className = 'guest-list';
+      listDiv.innerHTML = `
+        <strong>${table.textContent} 名單：</strong>
+        <ul>${guests.map(name => `<li>${name}</li>`).join('')}</ul>
+        <button onclick="sendToLine('${table.textContent}')">送出至 LINE</button>
+      `;
+      table.insertAdjacentElement('afterend', listDiv);
+    }
 
+    document.querySelectorAll('.table').forEach(table => {
+      if (!table.classList.contains('invisible-table')) {
+        table.addEventListener('click', () => {
+          highlightAndShowList(table);  // 點擊清除其他高亮，只保留一桌
+        });
+      }
+    });
 
+    function searchGuest() {
+      const name = document.getElementById("searchInput").value.trim();
+      if (!name) {
+        alert("請輸入姓名");
+        return;
+      }
+
+      clearHighlightsAndLists(); // 搜尋前清除
+
+      const foundTables = [];
+
+      for (const [key, guests] of Object.entries(guestData)) {
+        if (guests.includes(name)) {
+          foundTables.push(key);
+        }
+      }
+
+      if (foundTables.length === 0) {
+        alert("查無此人");
+        return;
+      }
+
+      // 多桌同時高亮與展開，不清除中途高亮
+      foundTables.forEach(key => {
+        const table = document.querySelector(`.table[data-key="${key}"]`);
+        if (table) {
+          highlightAndShowList(table, true);
+        }
+      });
+    }
+
+    function sendToLine(tableName) {
+      const encoded = encodeURIComponent(tableName);
+      const lineUrl = `https://line.me/R/oaMessage/@105puztp/?${encoded}`;
+      window.open(lineUrl, '_blank');
+    }
+  </script>
 </body>
 </html>
