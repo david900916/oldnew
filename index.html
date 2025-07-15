@@ -71,35 +71,16 @@
     <button onclick="searchGuest()">搜尋</button>
   </div>
 
-  <div id="seating-wrapper">
-    <div id="seating-area">
-      <div class="tables-row">
-        <div class="table" data-key="r1-0">女方朋友</div>
-        <div class="table" data-key="r2-0">女方親友</div>
-        <div class="table" data-key="r3-0">圓桌3-1</div>
-      </div>
-      <div class="tables-row">
-        <div class="table invisible-table" style="visibility: hidden;"></div>
-        <div class="table" data-key="r2-1">圓桌2-2</div>
-        <div class="table" data-key="r3-1">男方同事</div>
-      </div>
-      <div class="tables-row">
-        <div class="table invisible-table" style="visibility: hidden;"></div>
-        <div class="table invisible-table" style="visibility: hidden;"></div>
-        <div class="table" data-key="r3-2">圓桌3-3</div>
-      </div>
-    </div>
-  </div>
+ <div id="seating-wrapper"><div id="seating-area" style="display: flex; flex-direction: column; gap: 12px; justify-content: center;"><div class="tables-row" style="display: flex; flex-direction: row; gap: 24px;"><div class="table" data-key="r1-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">男方一桌</div><div class="table" data-key="r2-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">男方二桌</div><div class="table" data-key="r3-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">女方二桌</div><div class="table" data-key="r4-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">女方一桌</div></div><div class="tables-row" style="display: flex; flex-direction: row; gap: 24px;"><div class="table invisible-table" style="visibility: hidden; width: 100px; height: 100px; font-size: 18px;"></div><div class="table" data-key="r2-1" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">男方三桌</div><div class="table" data-key="r3-1" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">女方三桌</div><div class="table invisible-table" style="visibility: hidden; width: 100px; height: 100px; font-size: 18px;"></div></div></div></div>
 
   <script>
     const guestData = {
-      "r1-0": ["小明", "小美", "小華"],
-      "r1-1": ["佳芳", "麗娟"],
-      "r2-0": ["阿宏", "阿玉", "阿豪"],
-      "r2-1": ["宇軒", "家豪"],
-      "r3-0": ["小明", "芸芸"],
-      "r3-1": ["曉華", "阿福"],
-      "r3-2": ["阿德", "小志"]
+      "r1-0": ["曾勝揚", "路人A", "路人B", "路人C"],
+      "r2-0": ["盧科張", "路人甲", "路人乙", "路人丙"],
+      "r2-1": ["彭郁芯", "一米6", "70公斤", "希望變50公斤"],
+      "r3-0": ["mimi", "伊森", "佑輝", "彥成"],
+      "r3-1": ["波哥", "品牌長", "執行長", "董事長"],
+      "r4-0": ["櫃台", "一樓", "永心", "浮島"]
     };
 
     function clearHighlightsAndLists() {
