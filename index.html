@@ -56,27 +56,112 @@
     #searchBar {
       margin-bottom: 20px;
     }
+
+    /* ====== 自訂彈窗樣式（新增）====== */
+    #popup {
+      display: none;               /* 進頁隱藏，JS 會打開 */
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    #popup .content {
+      background: #fffde7;
+      padding: 20px;
+      border: 1px solid #f0c000;
+      border-radius: 8px;
+      max-width: 420px;
+      width: calc(100% - 40px);
+      text-align: center;
+      font-size: 16px;
+      color: #444;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+    #popup .content strong {
+      font-weight: 700;
+    }
+    #popup .content button {
+      margin-top: 12px;
+      padding: 8px 16px;
+      background: #f0c000;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+    }
   </style>
 </head>
 <body>
+  <!-- ====== 自訂彈窗（新增）====== -->
+  <div id="popup" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+    <div class="content">
+      <div id="popup-title" style="font-size:18px; margin-bottom:6px;">📣 <strong>提醒</strong></div>
+      <div style="line-height:1.6">
+        為了辨識您的身分，請點選「送出至 LINE」將座位訊息同步至官方帳號。<br><br>
+        因為每位貴賓的 LINE 帳號是唯一的，請務必告知我們，才能讓現場人員知道您是誰。
+      </div>
+      <button id="popup-confirm">確定</button>
+    </div>
+  </div>
+
+  <!-- 原本就顯示的 notice：保留 -->
   <div id="notice" style="margin-bottom: 12px; color: #444; background: #fffde7; padding: 10px 14px; border: 1px solid #f0c000; border-radius: 6px;">
     📣 <strong>提醒：</strong>為了辨識您的身分，請點選「送出至 LINE」將座位訊息同步至官方帳號。<br>
     因為每位貴賓的 LINE 帳號是唯一的，請務必告知我們，才能讓現場人員知道您是誰。
   </div>
-<div id="searchHint" style="color: #666; margin-bottom: 12px;"></div>
-
+  <div id="searchHint" style="color: #666; margin-bottom: 12px;"></div>
 
   <div id="searchBar">
     <input type="text" id="searchInput" placeholder="請輸入姓名或桌名">
     <button onclick="searchGuest()">搜尋</button>
   </div>
 
- <div id="seating-wrapper"><div id="seating-area" style="display: flex; flex-direction: column; gap: 12px; justify-content: center;"><div class="tables-row" style="display: flex; flex-direction: row; gap: 24px;"><div class="table" data-key="r1-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">男方親友</div><div class="table" data-key="r2-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">男方朋友</div><div class="table" data-key="r3-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">女方二桌</div><div class="table" data-key="r4-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">女方一桌</div></div><div class="tables-row" style="display: flex; flex-direction: row; gap: 24px;"><div class="table invisible-table" style="visibility: hidden; width: 100px; height: 100px; font-size: 18px;"></div><div class="table" data-key="r2-1" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">路人桌</div><div class="table" data-key="r3-1" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">女方三桌</div><div class="table invisible-table" style="visibility: hidden; width: 100px; height: 100px; font-size: 18px;"></div></div></div></div>
+  <div id="seating-wrapper">
+    <div id="seating-area" style="display: flex; flex-direction: column; gap: 12px; justify-content: center;">
+      <div class="tables-row" style="display: flex; flex-direction: row; gap: 24px;">
+        <div class="table" data-key="r1-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">男方親友</div>
+        <div class="table" data-key="r2-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">男方朋友</div>
+        <div class="table" data-key="r3-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">女方二桌</div>
+        <div class="table" data-key="r4-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">女方一桌</div>
+      </div>
+      <div class="tables-row" style="display: flex; flex-direction: row; gap: 24px;">
+        <div class="table invisible-table" style="visibility: hidden; width: 100px; height: 100px; font-size: 18px;"></div>
+        <div class="table" data-key="r2-1" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">路人桌</div>
+        <div class="table" data-key="r3-1" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">女方三桌</div>
+        <div class="table invisible-table" style="visibility: hidden; width: 100px; height: 100px; font-size: 18px;"></div>
+      </div>
+    </div>
+  </div>
 
   <script>
-window.onload = function() {
-      alert("📣 提醒：為了辨識您的身分，請點選「送出至 LINE」將座位訊息同步至官方帳號。\n\n因為每位貴賓的 LINE 帳號是唯一的，請務必告知我們，才能讓現場人員知道您是誰。");
+    /* ====== 開頁彈窗控制（新增）====== */
+    function openPopup() {
+      const popup = document.getElementById('popup');
+      popup.style.display = 'flex';
     }
+    function closePopup() {
+      const popup = document.getElementById('popup');
+      popup.style.display = 'none';
+    }
+    // 進頁就開啟
+    window.addEventListener('load', openPopup);
+    // 按鈕關閉
+    document.addEventListener('DOMContentLoaded', function () {
+      const btn = document.getElementById('popup-confirm');
+      if (btn) btn.addEventListener('click', closePopup);
+    });
+    // 點擊遮罩關閉
+    document.getElementById('popup').addEventListener('click', function (e) {
+      if (e.target.id === 'popup') closePopup();
+    });
+    // 按 Esc 關閉
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closePopup();
+    });
+
+    /* ====== 以下為你原本的功能，未改動 ====== */
     const guestData = {
       "r1-0": ["曾勝揚", "路人A", "路人B", "路人C"],
       "r2-0": ["盧科張", "路人甲", "路人乙", "路人丙"],
@@ -95,95 +180,90 @@ window.onload = function() {
     }
 
     function highlightAndShowList(table, skipClear = false, highlightName = '') {
-  if (!skipClear) clearHighlightsAndLists();
+      if (!skipClear) clearHighlightsAndLists();
 
-  const key = table.getAttribute('data-key');
-  const guests = guestData[key] || ["（無資料）"];
+      const key = table.getAttribute('data-key');
+      const guests = guestData[key] || ["（無資料）"];
 
-  table.style.backgroundColor = '#ffeb3b';
-  table.style.border = '3px solid red';
+      table.style.backgroundColor = '#ffeb3b';
+      table.style.border = '3px solid red';
 
-  const listDiv = document.createElement('div');
-  listDiv.className = 'guest-list';
-  listDiv.innerHTML = `
-    <strong>${table.textContent} 名單：</strong>
-    <ul>
-      ${guests.map(name => {
-        const displayName = (name === highlightName)
-          ? `<span style="color:red; font-weight:bold;">${name}</span>`
-          : name;
-        return `<li>${displayName}</li>`;
-      }).join('')}
-    </ul>
-    <button onclick="sendToLine('${table.textContent}')">送出至 LINE</button>
-  `;
-  table.insertAdjacentElement('afterend', listDiv);
-}
-
-
-   function searchGuest() {
-  const keyword = document.getElementById("searchInput").value.trim();
-  const hintBox = document.getElementById("searchHint");
-  if (!keyword) {
-    alert("請輸入姓名或桌名關鍵字");
-    return;
-  }
-
-  clearHighlightsAndLists();
-  hintBox.textContent = "";
-
-  const foundTables = new Set();
-
-  // 1. 人名比對
-  for (const [key, guests] of Object.entries(guestData)) {
-    if (guests.some(name => name.includes(keyword))) {
-      foundTables.add(key);
+      const listDiv = document.createElement('div');
+      listDiv.className = 'guest-list';
+      listDiv.innerHTML = `
+        <strong>${table.textContent} 名單：</strong>
+        <ul>
+          ${guests.map(name => {
+            const displayName = (name === highlightName)
+              ? `<span style="color:red; font-weight:bold;">${name}</span>`
+              : name;
+            return `<li>${displayName}</li>`;
+          }).join('')}
+        </ul>
+        <button onclick="sendToLine('${table.textContent}')">送出至 LINE</button>
+      `;
+      table.insertAdjacentElement('afterend', listDiv);
     }
-  }
 
-  // 2. 完全桌名匹配
-  const exactMatchTable = Array.from(document.querySelectorAll('.table')).find(
-    table => table.textContent.trim() === keyword
-  );
-  if (exactMatchTable) {
-    const key = exactMatchTable.getAttribute('data-key');
-    highlightAndShowList(exactMatchTable, true);
-    return;
-  }
+    function searchGuest() {
+      const keyword = document.getElementById("searchInput").value.trim();
+      const hintBox = document.getElementById("searchHint");
+      if (!keyword) {
+        alert("請輸入姓名或桌名關鍵字");
+        return;
+      }
 
-  // 3. 模糊桌名比對
-  const threshold = 0.5;
+      clearHighlightsAndLists();
+      hintBox.textContent = "";
 
-  document.querySelectorAll('.table').forEach(table => {
-    const key = table.getAttribute('data-key');
-    const tableName = table.textContent.trim();
-    const score = similarity(tableName, keyword);
+      const foundTables = new Set();
 
-    if (tableName.includes(keyword) || score >= threshold) {
-      foundTables.add(key);
+      // 1. 人名比對
+      for (const [key, guests] of Object.entries(guestData)) {
+        if (guests.some(name => name.includes(keyword))) {
+          foundTables.add(key);
+        }
+      }
+
+      // 2. 完全桌名匹配
+      const exactMatchTable = Array.from(document.querySelectorAll('.table')).find(
+        table => table.textContent.trim() === keyword
+      );
+      if (exactMatchTable) {
+        const key = exactMatchTable.getAttribute('data-key');
+        highlightAndShowList(exactMatchTable, true);
+        return;
+      }
+
+      // 3. 模糊桌名比對
+      const threshold = 0.5;
+      document.querySelectorAll('.table').forEach(table => {
+        const key = table.getAttribute('data-key');
+        const tableName = table.textContent.trim();
+        const score = similarity(tableName, keyword);
+
+        if (tableName.includes(keyword) || score >= threshold) {
+          foundTables.add(key);
+        }
+      });
+
+      if (foundTables.size === 0) {
+        alert("查無此人或桌名");
+        return;
+      }
+
+      if (foundTables.size > 1) {
+        hintBox.textContent = "🔍 找到多個相似桌名，已同時高亮，請確認是否正確。";
+      }
+
+      foundTables.forEach(key => {
+        const table = document.querySelector(`.table[data-key="${key}"]`);
+        if (table) {
+          const highlightName = guestData[key]?.includes(keyword) ? keyword : "";
+          highlightAndShowList(table, true, highlightName);
+        }
+      });
     }
-  });
-
-  if (foundTables.size === 0) {
-    alert("查無此人或桌名");
-    return;
-  }
-
-  if (foundTables.size > 1) {
-    hintBox.textContent = "🔍 找到多個相似桌名，已同時高亮，請確認是否正確。";
-  }
-
-  foundTables.forEach(key => {
-    const table = document.querySelector(`.table[data-key="${key}"]`);
-    if (table) {
-      const highlightName = guestData[key]?.includes(keyword) ? keyword : "";
-      highlightAndShowList(table, true, highlightName);
-    }
-  });
-}
-
-
-
 
     function sendToLine(tableName) {
       const encoded = encodeURIComponent(tableName);
@@ -191,47 +271,42 @@ window.onload = function() {
       window.open(lineUrl, '_blank');
     }
 
-
-
-
-function similarity(s1, s2) {
-  let longer = s1.length > s2.length ? s1 : s2;
-  let shorter = s1.length > s2.length ? s2 : s1;
-  let sameCount = 0;
-  for (let char of shorter) {
-    if (longer.includes(char)) sameCount++;
-  }
-  return sameCount / longer.length;
-}
-
-function levenshtein(a, b) {
-  const matrix = Array.from({ length: a.length + 1 }, () => []);
-  for (let i = 0; i <= a.length; i++) matrix[i][0] = i;
-  for (let j = 0; j <= b.length; j++) matrix[0][j] = j;
-
-  for (let i = 1; i <= a.length; i++) {
-    for (let j = 1; j <= b.length; j++) {
-      matrix[i][j] = a[i - 1] === b[j - 1]
-        ? matrix[i - 1][j - 1]
-        : Math.min(
-            matrix[i - 1][j] + 1,
-            matrix[i][j - 1] + 1,
-            matrix[i - 1][j - 1] + 1
-          );
+    function similarity(s1, s2) {
+      let longer = s1.length > s2.length ? s1 : s2;
+      let shorter = s1.length > s2.length ? s2 : s1;
+      let sameCount = 0;
+      for (let char of shorter) {
+        if (longer.includes(char)) sameCount++;
+      }
+      return sameCount / longer.length;
     }
-  }
 
-  const distance = matrix[a.length][b.length];
-  const maxLen = Math.max(a.length, b.length);
-  return (maxLen - distance) / maxLen; // 相似度分數 (0~1)
-}
+    function levenshtein(a, b) {
+      const matrix = Array.from({ length: a.length + 1 }, () => []);
+      for (let i = 0; i <= a.length; i++) matrix[i][0] = i;
+      for (let j = 0; j <= b.length; j++) matrix[0][j] = j;
 
-document.querySelectorAll('.table').forEach(table => {
-  table.addEventListener('click', () => {
-    highlightAndShowList(table);
-  });
-});
+      for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+          matrix[i][j] = a[i - 1] === b[j - 1]
+            ? matrix[i - 1][j - 1]
+            : Math.min(
+                matrix[i - 1][j] + 1,
+                matrix[i][j - 1] + 1,
+                matrix[i - 1][j - 1] + 1
+              );
+        }
+      }
+      const distance = matrix[a.length][b.length];
+      const maxLen = Math.max(a.length, b.length);
+      return (maxLen - distance) / maxLen; // 相似度分數 (0~1)
+    }
 
+    document.querySelectorAll('.table').forEach(table => {
+      table.addEventListener('click', () => {
+        highlightAndShowList(table);
+      });
+    });
   </script>
 </body>
 </html>
