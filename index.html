@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>座位查詢 - 轉置顯示</title>
+  <title>座位查詢</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -74,6 +74,9 @@
  <div id="seating-wrapper"><div id="seating-area" style="display: flex; flex-direction: column; gap: 12px; justify-content: center;"><div class="tables-row" style="display: flex; flex-direction: row; gap: 24px;"><div class="table" data-key="r1-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">男方親友</div><div class="table" data-key="r2-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">男方朋友</div><div class="table" data-key="r3-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">女方二桌</div><div class="table" data-key="r4-0" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">女方一桌</div></div><div class="tables-row" style="display: flex; flex-direction: row; gap: 24px;"><div class="table invisible-table" style="visibility: hidden; width: 100px; height: 100px; font-size: 18px;"></div><div class="table" data-key="r2-1" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">路人桌</div><div class="table" data-key="r3-1" style="background-color: rgb(255, 248, 220); width: 100px; height: 100px; font-size: 18px;">女方三桌</div><div class="table invisible-table" style="visibility: hidden; width: 100px; height: 100px; font-size: 18px;"></div></div></div></div>
 
   <script>
+window.onload = function() {
+      alert("📣 提醒：為了辨識您的身分，請點選「送出至 LINE」將座位訊息同步至官方帳號。\n\n因為每位貴賓的 LINE 帳號是唯一的，請務必告知我們，才能讓現場人員知道您是誰。");
+    }
     const guestData = {
       "r1-0": ["曾勝揚", "路人A", "路人B", "路人C"],
       "r2-0": ["盧科張", "路人甲", "路人乙", "路人丙"],
